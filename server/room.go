@@ -17,7 +17,10 @@ func (r *room) Run() {
 			close(client.send)
 		case msg := <-r.forward:
 			for client := range r.clients {
-				client.send <- msg
+				if msg.Sender == client {
+					continue
+				}
+				client.send <- msg.Msg
 			}
 		case <-r.close:
 			r.closeRoom()

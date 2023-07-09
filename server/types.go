@@ -21,8 +21,13 @@ type client struct {
 	room   *room
 }
 
+type Message struct {
+	Msg    []byte
+	Sender *client
+}
+
 type room struct {
-	forward chan []byte
+	forward chan Message
 	join    chan *client
 	leave   chan *client
 	clients map[*client]bool
@@ -42,7 +47,7 @@ func NewServer(addr string, prefix string) *VcServer {
 func (vs *VcServer) NewRoom() *room {
 	nroom := &room{
 		id:      vs.counter,
-		forward: make(chan []byte),
+		forward: make(chan Message),
 		join:    make(chan *client),
 		leave:   make(chan *client),
 		clients: make(map[*client]bool),

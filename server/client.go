@@ -11,7 +11,10 @@ func (c *client) read() {
 		if err != nil {
 			return
 		}
-		c.room.forward <- msg
+		c.room.forward <- Message{
+			Msg:    msg,
+			Sender: c,
+		}
 	}
 }
 
